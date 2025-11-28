@@ -2,58 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 
-class Salas_y_exposiciones extends StatelessWidget {
+class Salas_y_exposiciones extends StatefulWidget {
   const Salas_y_exposiciones({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sala o Exposiciones Destacado'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/'),
-        ),
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.asset(
-                    'assets/images/museo_1.jpg',
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'Museo de la Cultura Inca',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  State<Salas_y_exposiciones> createState() => _Salas_y_exposicionesState();
 }
 
-
-class PaquetesServicio extends StatefulWidget {
-  const PaquetesServicio({super.key});
-
-  @override
-  State<PaquetesServicio> createState() => _PaquetesServicioState();
-}
-
-class _PaquetesServicioState extends State<PaquetesServicio> {
+class _Salas_y_exposicionesState extends State<Salas_y_exposiciones> {
   String packageType = 'Básico';
   String resultText = 'Seleccione un paquete para ver información.';
 
@@ -70,6 +26,8 @@ class _PaquetesServicioState extends State<PaquetesServicio> {
         break;
     }
   }
+  
+
 
   @override
   Widget build(BuildContext context) {
@@ -91,22 +49,36 @@ class _PaquetesServicioState extends State<PaquetesServicio> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.asset(
+                    'assets/images/museo_1.jpg',
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                  ),
+                ),
+              ),
+            const SizedBox(height: 16),
             DropdownButton<String>(
               value: packageType,
               isExpanded: true,
               items: const [
                 DropdownMenuItem(
                   value: 'Básico',
-                  child: Text('Paquete básico'),
+                  child: Text('Historia'),
                 ),
                 DropdownMenuItem(
                   value: 'Completo',
-                  child: Text('Paquete completo'),
+                  child: Text('Arte moderno'),
                 ),
                 DropdownMenuItem(
                   value: 'Premium',
-                  child: Text('Paquete premium'),
+                  child: Text('Ciencia'),
+                ),
+                DropdownMenuItem(
+                  value: 'Cultura',
+                  child: Text('Cultura local'),
                 ),
               ],
               onChanged: (value) {

@@ -5,49 +5,47 @@ class Tienda_de_recuerdos extends StatefulWidget {
   const Tienda_de_recuerdos({super.key});
 
   @override
-  State<Tienda_de_recuerdos> createState() => _Tienda_de_recuerdos();
+  State<Tienda_de_recuerdos> createState() => _Tienda_de_recuerdosState();
 }
 
-class _Tienda_de_recuerdos extends State<Tienda_de_recuerdos> {
-  String cardType = 'Débito nacional';
-  String amountText = '';
+class _Tienda_de_recuerdosState extends State<Tienda_de_recuerdos> {
+  String packageType = 'Básico';
   String resultText = '';
 
-  void calculateAtmFee() {
-    final amount = double.tryParse(amountText.replaceAll(',', '.')) ?? 0.0;
+  void showPackageInfo() {
+    double price = 0;
+    String description;
 
-    if (amount <= 0) {
-      setState(() {
-        resultText = 'Ingrese un monto válido';
-      });
-      return;
+    if (packageType == 'Básico') {
+      price = 40;
+      description = 'Cambio de aceite y revisión visual.';
+    } else if (packageType == 'Completo') {
+      price = 80;
+      description = 'Cambio de aceite, filtros y revisión de frenos.';
+    } else {
+      price = 120;
+      description = 'Servicio completo, escaneo y alineación básica.';
     }
-
-    double fee = 0.0;
-
-    if (cardType == 'Débito nacional') {
-      fee = 0.5;
-    } else if (cardType == 'Débito internacional') {
-      fee = 1.5;
-    } else if (cardType == 'Crédito') {
-      fee = 2.0;
-    }
-
-    final total = amount + fee;
 
     setState(() {
       resultText =
-        'Tarjeta: $cardType\n'
-        'Comisión: \$${fee.toStringAsFixed(2)}\n'
-        'Total debitado: \$${total.toStringAsFixed(2)}';
+        'Paquete: $packageType\n'
+        'Precio: \$${price.toStringAsFixed(2)}\n'
+        'Incluye: $description';
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    showPackageInfo();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Comisión de cajero'),
+        title: const Text('Paquetes de servicio'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.go('/'),
@@ -59,53 +57,39 @@ class _Tienda_de_recuerdos extends State<Tienda_de_recuerdos> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Text(
-              'Cálculo de comisión en cajero',
+              'Seleccione un paquete',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
 
             DropdownButton<String>(
-              value: cardType,
+              value: packageType,
               isExpanded: true,
               items: const [
                 DropdownMenuItem(
-                  value: 'Débito nacional',
-                  child: Text('Tarjeta débito nacional'),
+                  value: 'Básico',
+                  child: Text('Postales'),
                 ),
                 DropdownMenuItem(
-                  value: 'Débito internacional',
-                  child: Text('Tarjeta débito internacional'),
+                  value: 'Completo',
+                  child: Text('Libros'),
                 ),
                 DropdownMenuItem(
-                  value: 'Crédito',
-                  child: Text('Tarjeta de crédito'),
+                  value: 'Medium',
+                  child: Text('Figuras'),
+                ),
+                DropdownMenuItem(
+                  value: 'Premium',
+                  child: Text('Camisetas'),
                 ),
               ],
               onChanged: (value) {
                 if (value == null) return;
                 setState(() {
-                  cardType = value;
+                  packageType = value;
+                  showPackageInfo();
                 });
               },
-            ),
-
-            const SizedBox(height: 16),
-
-            TextField(
-              decoration: const InputDecoration(
-                labelText: 'Monto a retirar (\$)',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.number,
-              onChanged: (value) {
-                amountText = value;
-              },
-            ),
-
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: calculateAtmFee,
-              child: const Text('Calcular'),
             ),
 
             const SizedBox(height: 16),
